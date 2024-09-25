@@ -4,13 +4,13 @@ import com.mihir.databaseR.domain.dto.BookDto;
 import com.mihir.databaseR.domain.entities.BookEntity;
 import com.mihir.databaseR.mapper.Mapper;
 import com.mihir.databaseR.service.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class BookController {
@@ -38,11 +38,9 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<BookDto> getAllBooks() {
-        List<BookEntity> bookEntities = bookService.findAll();
-        return bookEntities.stream()
-                .map(bookMapper::mapTo)
-                .collect(Collectors.toList());
+    public Page<BookDto> getAllBooks(Pageable pageable) {
+        Page<BookEntity> bookEntities = bookService.findAll(pageable);
+        return bookEntities.map(bookMapper::mapTo);
     }
 
     @GetMapping("books/{isbn}")
