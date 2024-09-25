@@ -37,8 +37,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public boolean ifExists(long id) {
-        return authorRepository.existsById(id);
+    public boolean ifDoesNotExists(long id) {
+        return !authorRepository.existsById(id);
     }
 
     @Override
@@ -49,5 +49,10 @@ public class AuthorServiceImpl implements AuthorService {
             Optional.ofNullable(authorEntity.getAge()).ifPresent(existingAuthor::setAge);
             return authorRepository.save(existingAuthor);
         }).orElseThrow(() -> new RuntimeException("No author found with id: " + id));
+    }
+
+    @Override
+    public void delete(long id) {
+        authorRepository.deleteById(id);
     }
 }

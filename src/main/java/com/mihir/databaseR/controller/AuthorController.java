@@ -50,7 +50,7 @@ public class AuthorController {
 
     @PutMapping("/authors/{id}")
     public ResponseEntity<AuthorDto> updateAuthor(@PathVariable long id, @RequestBody AuthorDto author) {
-        if(!authorService.ifExists(id))
+        if(authorService.ifDoesNotExists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         author.setId(id);
@@ -61,11 +61,17 @@ public class AuthorController {
 
     @PatchMapping("/authors/{id}")
     public ResponseEntity<AuthorDto> patchAuthor(@PathVariable long id, @RequestBody AuthorDto author) {
-        if (!authorService.ifExists(id))
+        if (authorService.ifDoesNotExists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         AuthorEntity authorEntity = authorMapper.mapFrom(author);
         AuthorEntity updatedAuthor = authorService.partialUpdate(id,authorEntity);
         return new ResponseEntity<>(authorMapper.mapTo(updatedAuthor), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/authors/{id}")
+    public ResponseEntity deleteAuthor(@PathVariable long id) {
+        authorService.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

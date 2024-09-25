@@ -232,4 +232,18 @@ public class AuthorControllerIntTest {
                 MockMvcResultMatchers.jsonPath("$.name").value("Updated Author")
         );
     }
+
+    @Test
+    public void testThatAuthorDeleteSuccessfullyReturnHTTP204NoContent() throws Exception {
+
+        AuthorEntity authorEntity = TestDataUtil.createAuthorEntityA();
+        AuthorEntity savedAuthor = authorService.saveAuthor(authorEntity);
+
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/"+savedAuthor.getId())
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }

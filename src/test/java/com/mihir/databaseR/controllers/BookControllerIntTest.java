@@ -219,4 +219,18 @@ public class BookControllerIntTest {
 
     }
 
+    @Test
+    public void testThatBookDeleteSuccessfullyReturnHTTP204NoContent() throws Exception{
+
+        BookEntity bookEntityA = TestDataUtil.createBookEntityA(null);
+        bookService.createUpdateBook(bookEntityA.getIsbn(), bookEntityA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/books/"+ bookEntityA.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
 }
